@@ -1,4 +1,4 @@
-// helpers.go (optional)
+// helpers.go (Optional, if you need extra utilities)
 package utils
 
 import "log"

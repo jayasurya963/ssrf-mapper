@@ -10,6 +10,8 @@ import (
     "strings"
     "sync"
     "time"
+	"log"
+	"ssrf-mapper/scanner"  //Import your scanner package for ScanURL
 
     "github.com/yourusername/ssrf-mapper/internal/utils"
 )
@@ -144,4 +146,30 @@ func resultsToSlice(results <-chan Result) []Result {
         all = append(all, res)
     }
     return all
+}
+
+func main() {
+	// Define flags for command-line arguments
+	var detectJSRedirects bool
+	var targetURL string
+	
+	// Flag to enable/disable JavaScript redirect detection
+	flag.BoolVar(&detectJSRedirects, "detect-js-redirects", true, "Enable client-side redirect detection")
+	
+	// Flag to pass the target URL you want to scan
+	flag.StringVar(&targetURL, "url", "", "Target URL to test")
+	
+	// Parse the flags
+	flag.Parse()
+
+	// Ensure the target URL is provided
+	if targetURL == "" {
+		log.Fatal("[ERROR] Please provide a target URL using the -url flag.")
+	}
+
+	// Call the ScanURL function from the scanner package
+	scanner.ScanURL(targetURL, detectJSRedirects)
+
+	// Print scan completion info
+	fmt.Printf("[INFO] Scan complete for: %s\n", targetURL)
 }
